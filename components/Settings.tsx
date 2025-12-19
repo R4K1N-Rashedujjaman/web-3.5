@@ -4,7 +4,8 @@ import { AppSettings } from '../types';
 import { 
     Palette, Zap, Layout as LayoutIcon, Eye, Database, Code, 
     Monitor, Moon, Sun, Sliders, Battery, Download, Upload, Trash2, RefreshCw,
-    Smartphone, Grid, List, AlignJustify, Type, Layers, Cpu, MousePointer, Activity
+    Smartphone, Grid, List, AlignJustify, Type, Layers, Cpu, MousePointer, Activity, 
+    Terminal, FileJson, Ban, MousePointer2, Frame, BoxSelect, ImageOff, Network, FileCode
 } from 'lucide-react';
 
 interface SettingsProps {
@@ -66,7 +67,7 @@ const SettingsView: React.FC<SettingsProps> = ({ settings, updateSettings, reset
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold uppercase tracking-widest leading-none text-[var(--text-main)]">Control Center</h1>
-                        <span className="text-[10px] font-mono text-[var(--text-muted)]">SYS_CONFIG_V2.4</span>
+                        <span className="text-[10px] font-mono text-[var(--text-muted)]">SYS_CONFIG_V2.5</span>
                     </div>
                 </div>
                 {settings.lowPowerMode && <div className="text-amber-500 text-xs font-mono border border-amber-500/30 bg-amber-500/10 px-2 py-1 rounded">LOW POWER MODE ACTIVE</div>}
@@ -205,13 +206,40 @@ const SettingsView: React.FC<SettingsProps> = ({ settings, updateSettings, reset
                             <SectionTitle title="Motion Dynamics" icon={Zap} />
                             
                             <div className="grid md:grid-cols-2 gap-x-12 gap-y-6">
-                                <Switch label="Page Transitions" checked={settings.pageTransitions} onChange={(c) => updateSettings({ pageTransitions: c })} />
+                                <Switch label="Popout Page Transitions" desc="Professional slow-pop effect." checked={settings.pageTransitions} onChange={(c) => updateSettings({ pageTransitions: c })} highlight icon={Zap} />
                                 <Switch label="Component Fade-ins" checked={settings.componentFadeIns} onChange={(c) => updateSettings({ componentFadeIns: c })} />
                                 <Switch label="Diagram Animations" checked={settings.diagramAnimations} onChange={(c) => updateSettings({ diagramAnimations: c })} />
                                 <Switch label="Perf. Meter Motion" checked={settings.performanceMeterAnimations} onChange={(c) => updateSettings({ performanceMeterAnimations: c })} />
                                 <Switch label="Hover Glow Effects" checked={settings.hoverEffects} onChange={(c) => updateSettings({ hoverEffects: c })} />
                                 <Switch label="Parallax Effects" checked={settings.parallaxEffects} onChange={(c) => updateSettings({ parallaxEffects: c })} />
                                 
+                                <div className="col-span-full">
+                                    <ControlGroup label="Scroll Physics">
+                                         <div className="flex gap-2">
+                                            <button
+                                                onClick={() => updateSettings({ scrollBehavior: 'smooth' })}
+                                                className={`flex-1 py-2 rounded text-xs uppercase font-bold border transition-all ${
+                                                    settings.scrollBehavior === 'smooth' 
+                                                        ? 'bg-primary text-[var(--text-on-primary)] border-primary' 
+                                                        : 'bg-[var(--bg-element)] text-[var(--text-muted)] border-[var(--border-base)]'
+                                                }`}
+                                            >
+                                                Smooth
+                                            </button>
+                                            <button
+                                                onClick={() => updateSettings({ scrollBehavior: 'auto' })}
+                                                className={`flex-1 py-2 rounded text-xs uppercase font-bold border transition-all ${
+                                                    settings.scrollBehavior === 'auto' 
+                                                        ? 'bg-primary text-[var(--text-on-primary)] border-primary' 
+                                                        : 'bg-[var(--bg-element)] text-[var(--text-muted)] border-[var(--border-base)]'
+                                                }`}
+                                            >
+                                                Instant
+                                            </button>
+                                        </div>
+                                    </ControlGroup>
+                                </div>
+
                                 <div className="col-span-full border-t border-[var(--border-base)] my-4" />
                                 
                                 <Switch 
@@ -259,17 +287,31 @@ const SettingsView: React.FC<SettingsProps> = ({ settings, updateSettings, reset
                                         options={['two-column', 'stacked']}
                                         onChange={(v) => updateSettings({ layoutStyle: v as any })} 
                                     />
+                                    
+                                    <ControlGroup label="Page Container Width">
+                                        <div className="flex gap-2">
+                                            {['standard', 'wide', 'full'].map((w) => (
+                                                <button
+                                                    key={w}
+                                                    onClick={() => updateSettings({ contentWidth: w as any })}
+                                                    className={`flex-1 py-2 rounded text-xs uppercase font-bold border transition-all ${
+                                                        settings.contentWidth === w 
+                                                            ? 'bg-primary text-[var(--text-on-primary)] border-primary' 
+                                                            : 'bg-[var(--bg-element)] text-[var(--text-muted)] border-[var(--border-base)]'
+                                                    }`}
+                                                >
+                                                    {w}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </ControlGroup>
+
                                     <RangeSlider 
                                         label="Card Scale"
                                         value={settings.cardSize === 'small' ? 0 : settings.cardSize === 'medium' ? 1 : 2}
                                         min={0} max={2}
                                         onChange={(v) => updateSettings({ cardSize: v === 0 ? 'small' : v === 1 ? 'medium' : 'large' })}
                                     />
-                                    <div className="flex justify-between text-xs font-mono text-[var(--text-muted)] px-1">
-                                        <span>Small</span>
-                                        <span>Medium</span>
-                                        <span>Large</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -293,14 +335,36 @@ const SettingsView: React.FC<SettingsProps> = ({ settings, updateSettings, reset
                                 <Switch label="Disable 3D Diagrams" checked={settings.disable3D} onChange={(c) => updateSettings({ disable3D: c })} />
                                 <Switch label="Lazy Loading" checked={settings.lazyLoading} onChange={(c) => updateSettings({ lazyLoading: c })} />
                                 <Switch label="Image Preloading" checked={settings.imagePreloading} onChange={(c) => updateSettings({ imagePreloading: c })} />
+                                <Switch label="Low Spec Mode" desc="Disables images for max speed." checked={settings.lowSpecMode} onChange={(c) => updateSettings({ lowSpecMode: c })} icon={ImageOff} highlight />
                                 
                                 <div className="col-span-full">
-                                    <RangeSlider 
-                                        label={`Animation FPS Limit: ${settings.fpsLimit}`}
-                                        value={settings.fpsLimit}
-                                        min={30} max={144} step={30}
-                                        onChange={(v) => updateSettings({ fpsLimit: v })}
-                                    />
+                                    <ControlGroup label="Animation FPS Target (Simulation)">
+                                        <div className="flex gap-2">
+                                            {[30, 60, 120, 144].map((fps) => (
+                                                <button
+                                                    key={fps}
+                                                    onClick={() => updateSettings({ fpsLimit: fps })}
+                                                    className={`flex-1 py-2 rounded text-xs font-bold font-mono border transition-all ${
+                                                        settings.fpsLimit === fps 
+                                                            ? 'bg-primary/20 text-primary border-primary' 
+                                                            : 'bg-[var(--bg-element)] text-[var(--text-muted)] border-[var(--border-base)] hover:bg-[var(--bg-panel)]'
+                                                    }`}
+                                                >
+                                                    {fps}
+                                                </button>
+                                            ))}
+                                            <button
+                                                onClick={() => updateSettings({ fpsLimit: 999 })}
+                                                className={`flex-1 py-2 rounded text-xs font-bold font-mono border transition-all ${
+                                                    settings.fpsLimit === 999 
+                                                        ? 'bg-primary/20 text-primary border-primary' 
+                                                        : 'bg-[var(--bg-element)] text-[var(--text-muted)] border-[var(--border-base)] hover:bg-[var(--bg-panel)]'
+                                                }`}
+                                            >
+                                                MAX
+                                            </button>
+                                        </div>
+                                    </ControlGroup>
                                 </div>
 
                                 <div className="col-span-full pt-4">
@@ -326,6 +390,7 @@ const SettingsView: React.FC<SettingsProps> = ({ settings, updateSettings, reset
                                 <Switch label="Dyslexia-Friendly Font" checked={settings.dyslexiaFriendly} onChange={(c) => updateSettings({ dyslexiaFriendly: c })} />
                                 <Switch label="Keyboard Navigation Hints" checked={settings.keyboardNav} onChange={(c) => updateSettings({ keyboardNav: c })} />
                                 <Switch label="Screen Reader ARIA Hints" checked={settings.screenReaderHints} onChange={(c) => updateSettings({ screenReaderHints: c })} />
+                                <Switch label="Focus Highlight" desc="Thick neon outlines on focus." checked={settings.focusHighlight} onChange={(c) => updateSettings({ focusHighlight: c })} icon={BoxSelect} />
                                 
                                 <div className="col-span-full">
                                      <RangeSlider 
@@ -397,11 +462,19 @@ const SettingsView: React.FC<SettingsProps> = ({ settings, updateSettings, reset
                             
                             <div className="grid md:grid-cols-2 gap-x-12 gap-y-6">
                                 <Switch label="Developer Mode" checked={settings.devMode} onChange={(c) => updateSettings({ devMode: c })} highlight />
-                                <Switch label="Show Component Data" checked={settings.showComponentData} onChange={(c) => updateSettings({ showComponentData: c })} />
-                                <Switch label="Show FPS Meter" checked={settings.showFPS} onChange={(c) => updateSettings({ showFPS: c })} />
-                                <Switch label="Show Grid Overlay" checked={settings.showGridOverlay} onChange={(c) => updateSettings({ showGridOverlay: c })} />
-                                <Switch label="Debug Outlines" checked={settings.showDebugOutlines} onChange={(c) => updateSettings({ showDebugOutlines: c })} />
-                                <Switch label="Component Boundaries" checked={settings.showComponentBoundaries} onChange={(c) => updateSettings({ showComponentBoundaries: c })} />
+                                
+                                <div className={`col-span-full grid md:grid-cols-2 gap-x-12 gap-y-6 transition-opacity duration-300 ${!settings.devMode ? 'opacity-40 pointer-events-none grayscale' : ''}`}>
+                                    <Switch label="Interactive Terminal" desc="CLI with input & logging." checked={settings.showSystemTerminal} onChange={(c) => updateSettings({ showSystemTerminal: c })} icon={Terminal} />
+                                    <Switch label="Source Code Terminal" desc="Inspect application source." checked={settings.showSourceCode} onChange={(c) => updateSettings({ showSourceCode: c })} icon={FileCode} />
+                                    <Switch label="Wireframe Mode" desc="Strip styling for layout debug." checked={settings.wireframeMode} onChange={(c) => updateSettings({ wireframeMode: c })} icon={Frame} />
+                                    <Switch label="Show Component Data" desc="View raw JSON source." checked={settings.showComponentData} onChange={(c) => updateSettings({ showComponentData: c })} icon={FileJson} />
+                                    <Switch label="Show Real FPS" desc="Monitors requestAnimationFrame." checked={settings.showFPS} onChange={(c) => updateSettings({ showFPS: c })} icon={Activity} />
+                                    <Switch label="DOM Inspector" desc="Floating node counter." checked={settings.showDomInspector} onChange={(c) => updateSettings({ showDomInspector: c })} icon={Network} />
+                                    <Switch label="Show Grid Overlay" checked={settings.showGridOverlay} onChange={(c) => updateSettings({ showGridOverlay: c })} />
+                                    <Switch label="Debug Outlines" checked={settings.showDebugOutlines} onChange={(c) => updateSettings({ showDebugOutlines: c })} />
+                                    <Switch label="Component Boundaries" checked={settings.showComponentBoundaries} onChange={(c) => updateSettings({ showComponentBoundaries: c })} />
+                                    <Switch label="Event Logger" desc="Log clicks to terminal" checked={settings.logInteractions} onChange={(c) => updateSettings({ logInteractions: c })} icon={MousePointer2} />
+                                </div>
                             </div>
                         </div>
                     )}

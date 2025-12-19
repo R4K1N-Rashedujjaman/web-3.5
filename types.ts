@@ -55,6 +55,7 @@ export interface AppSettings {
   parallaxEffects: boolean;
   reducedMotion: boolean;
   gpuAcceleration: boolean;
+  scrollBehavior: 'smooth' | 'auto'; // NEW
   
   // Layout Tab
   gridStyle: 'grid' | 'list' | 'compact';
@@ -62,6 +63,7 @@ export interface AppSettings {
   navigationStyle: 'top' | 'side';
   layoutStyle: 'two-column' | 'stacked';
   cardSize: 'small' | 'medium' | 'large';
+  contentWidth: 'standard' | 'wide' | 'full'; // NEW
 
   // Performance Tab
   disableHeavyAnimations: boolean;
@@ -70,6 +72,7 @@ export interface AppSettings {
   imagePreloading: boolean;
   fpsLimit: number; // 30, 60, 120, 144
   lowPowerMode: boolean;
+  lowSpecMode: boolean; // NEW (Texture Quality)
 
   // Accessibility Tab
   highContrast: boolean;
@@ -77,6 +80,7 @@ export interface AppSettings {
   fontSizeScale: number; // 0.8 to 1.5
   keyboardNav: boolean;
   screenReaderHints: boolean;
+  focusHighlight: boolean; // NEW
 
   // Developer Tab
   devMode: boolean;
@@ -85,4 +89,17 @@ export interface AppSettings {
   showGridOverlay: boolean;
   showDebugOutlines: boolean;
   showComponentBoundaries: boolean;
+  logInteractions: boolean; // NEW
+  showDomInspector: boolean; // NEW
+  showSystemTerminal: boolean; // NEW
+  wireframeMode: boolean; // NEW
+  showSourceCode: boolean; // NEW
+}
+
+export interface LogEntry {
+    id: string;
+    timestamp: string;
+    source: string;
+    message: string;
+    type: 'info' | 'event' | 'warn' | 'cmd';
 }

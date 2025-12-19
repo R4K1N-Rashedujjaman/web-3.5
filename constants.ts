@@ -19,6 +19,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   parallaxEffects: false,
   reducedMotion: false,
   gpuAcceleration: true,
+  scrollBehavior: 'smooth',
 
   // Layout
   gridStyle: 'grid',
@@ -26,6 +27,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   navigationStyle: 'top',
   layoutStyle: 'two-column',
   cardSize: 'medium',
+  contentWidth: 'standard',
 
   // Performance
   disableHeavyAnimations: false,
@@ -34,6 +36,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   imagePreloading: false,
   fpsLimit: 60,
   lowPowerMode: false,
+  lowSpecMode: false,
 
   // Accessibility
   highContrast: false,
@@ -41,6 +44,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   fontSizeScale: 1,
   keyboardNav: false,
   screenReaderHints: true,
+  focusHighlight: false,
 
   // Developer
   devMode: false,
@@ -49,6 +53,11 @@ export const DEFAULT_SETTINGS: AppSettings = {
   showGridOverlay: false,
   showDebugOutlines: false,
   showComponentBoundaries: false,
+  logInteractions: false,
+  showDomInspector: false,
+  showSystemTerminal: false,
+  wireframeMode: false,
+  showSourceCode: false,
 };
 
 export const COMPONENT_DB: Record<string, HardwareData> = {

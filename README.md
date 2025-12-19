@@ -1,29 +1,20 @@
-# COLLEGE PROJECT: WEB DESIGN
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
----
+# Run and deploy your AI Studio app
 
-### **PROJECT MANIFEST**
-*   **Subject:** Web Design & Development
-*   **Developer:** Rashedusjjaman Rakin
-*   **Tech Stack:** React 19, TypeScript, Tailwind CSS
-*   **Status:** Active / Production Ready
+This contains everything you need to run your app locally.
 
----
+View your app in AI Studio: https://ai.studio/apps/drive/1UjPmrio7BkPJ79gX6aAHgfciXdsoLBIH
 
-### **ACADEMIC PROFILE**
-*   **Name:** Rashedusjjaman Rakin
-*   **Institute:** Dhaka Polytechnic Institute
-*   **Department:** Computer Science & Technology
-*   **Roll Number:** 852511
-*   **Section:** B
-*   **Education:** Diploma in Engineering
+## Run Locally
 
----
-### **WHY AND HOW THIS WAS MADE**
+**Prerequisites:**  Node.js
 
-**Why this was made:**
-This was made for a Dhaka Polytechnic Web Design project. The goal was to create a fast and functional website 
 
-**How this was made:**
-First, Odoo was used to design the website structure and automatically generate the base code. Then, the code was moved into Gemini Studio to fix the design and add modern features. Finally, everything was saved to GitHub and Netlify was used to make the website live.
-
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

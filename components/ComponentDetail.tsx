@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, CheckCircle, Zap, Activity, Grid, Scale, Plus, Factory, BookOpen, ChevronRight } from 'lucide-react';
-import { HardwareData, ComparisonModel } from '../types';
+import { ArrowLeft, CheckCircle, Zap, Activity, Grid, Scale, Plus, Factory, BookOpen, ChevronRight, ImageOff, FileJson } from 'lucide-react';
+import { HardwareData, ComparisonModel, AppSettings } from '../types';
 import { COMPONENT_DB } from '../constants';
 
-const ComponentDetail: React.FC<{ id: string, onBack: () => void }> = ({ id, onBack }) => {
+const ComponentDetail: React.FC<{ id: string, onBack: () => void, settings?: AppSettings }> = ({ id, onBack, settings }) => {
   const data: HardwareData = COMPONENT_DB[id] || {
     id,
     name: id.charAt(0).toUpperCase() + id.slice(1),
@@ -32,14 +32,16 @@ const ComponentDetail: React.FC<{ id: string, onBack: () => void }> = ({ id, onB
     });
   };
 
+  const isLowSpec = settings?.lowSpecMode;
+
   return (
-    <div className="animate-fade-in pb-32">
-        <button onClick={onBack} className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-main)] mb-6 transition-colors group">
+    <div className="pb-32">
+        <button onClick={onBack} className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-main)] mb-6 transition-colors group animate-enter">
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Database
         </button>
 
         {/* 1. Technical Hero */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 border-b border-[var(--border-base)] pb-12">
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 border-b border-[var(--border-base)] pb-12 animate-enter stagger-1">
             <div className="order-2 lg:order-1">
                 <span className="text-primary font-mono tracking-widest text-sm font-bold bg-primary/10 px-2 py-1 rounded inline-block mb-3">ID: {data.id.toUpperCase()}</span>
                 <h1 className="text-5xl lg:text-7xl font-black mb-4 leading-tight text-[var(--text-main)]">
@@ -52,29 +54,38 @@ const ComponentDetail: React.FC<{ id: string, onBack: () => void }> = ({ id, onB
             </div>
             <div className="relative group order-1 lg:order-2">
                 <div className="absolute -inset-4 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <img 
-                    src={data.image} 
-                    alt={data.name} 
-                    className="relative w-full rounded-xl shadow-2xl border border-[var(--border-base)] group-hover:scale-[1.02] transition-transform duration-500 object-cover h-[400px]" 
-                />
+                {isLowSpec ? (
+                    <div className="w-full h-[400px] rounded-xl border border-dashed border-[var(--border-base)] bg-[var(--bg-element)] flex flex-col items-center justify-center text-[var(--text-muted)]">
+                        <ImageOff size={48} className="mb-2" />
+                        <span className="font-mono text-xs">VISUALS DISABLED (LOW SPEC)</span>
+                    </div>
+                ) : (
+                    <img 
+                        src={data.image} 
+                        alt={data.name} 
+                        className="relative w-full rounded-xl shadow-2xl border border-[var(--border-base)] group-hover:scale-[1.02] transition-transform duration-500 object-cover h-[400px]" 
+                    />
+                )}
             </div>
         </div>
 
         {/* 2. Analysis Grid */}
-        <SectionHeader number="01" title="Engineering Concepts" />
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-            {data.concepts.length > 0 ? data.concepts.map((c, i) => (
-                <div key={i} className="bg-panel p-6 rounded-lg border border-[var(--border-base)] hover:border-primary/50 transition-colors group">
-                    <strong className="block text-primary text-lg mb-3 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
-                        <Zap size={18} /> {c.title}
-                    </strong>
-                    <p className="text-[var(--text-muted)] text-sm leading-relaxed">{c.text}</p>
-                </div>
-            )) : <p className="text-[var(--text-muted)] italic">No advanced concepts loaded.</p>}
+        <div className="animate-enter stagger-2">
+            <SectionHeader number="01" title="Engineering Concepts" />
+            <div className="grid md:grid-cols-3 gap-6 mb-16">
+                {data.concepts.length > 0 ? data.concepts.map((c, i) => (
+                    <div key={i} className="bg-panel p-6 rounded-lg border border-[var(--border-base)] hover:border-primary/50 transition-colors group">
+                        <strong className="block text-primary text-lg mb-3 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                            <Zap size={18} /> {c.title}
+                        </strong>
+                        <p className="text-[var(--text-muted)] text-sm leading-relaxed">{c.text}</p>
+                    </div>
+                )) : <p className="text-[var(--text-muted)] italic">No advanced concepts loaded.</p>}
+            </div>
         </div>
 
         {/* 3. Specs & Blueprint */}
-        <div className="grid lg:grid-cols-5 gap-8 mb-16">
+        <div className="grid lg:grid-cols-5 gap-8 mb-16 animate-enter stagger-3">
             <div className="lg:col-span-3">
                 <SectionHeader number="02" title="Specification Matrix" />
                 <div className="bg-panel rounded-lg border border-[var(--border-base)] overflow-hidden">
@@ -106,7 +117,7 @@ const ComponentDetail: React.FC<{ id: string, onBack: () => void }> = ({ id, onB
 
         {/* NEW SECTION: Architectural Deep Dive */}
         {data.architectureDeepDive && data.architectureDeepDive.length > 0 && (
-            <div className="mb-16">
+            <div className="mb-16 animate-enter stagger-4">
                 <SectionHeader number="04" title="Architectural Deep Dive" />
                 <div className="bg-panel/50 p-8 rounded-xl border border-[var(--border-base)]">
                     <div className="flex items-start gap-6">
@@ -125,7 +136,7 @@ const ComponentDetail: React.FC<{ id: string, onBack: () => void }> = ({ id, onB
 
         {/* NEW SECTION: Manufacturing Process */}
         {data.manufacturingProcess && data.manufacturingProcess.length > 0 && (
-            <div className="mb-16">
+            <div className="mb-16 animate-enter stagger-5">
                 <SectionHeader number="05" title="Manufacturing Process" />
                 <div className="relative border-l-2 border-[var(--border-base)] ml-4 md:ml-6 space-y-12">
                     {data.manufacturingProcess.map((step, i) => (
@@ -148,56 +159,72 @@ const ComponentDetail: React.FC<{ id: string, onBack: () => void }> = ({ id, onB
         )}
 
         {/* 6. Comparative Engine */}
-        <SectionHeader number="06" title="Comparison Engine" />
-        
-        {data.marketModels.length === 0 ? (
-            <p className="text-[var(--text-muted)]">Awaiting comparison data for this category.</p>
-        ) : (
-            <div className="bg-panel/30 p-6 rounded-xl border border-[var(--border-base)]">
-                <p className="mb-6 text-[var(--text-main)] flex items-center gap-2">
-                    <Scale size={20} className="text-primary" />
-                    Select exactly <strong>two</strong> models below to launch the VS Matrix.
-                </p>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                    {data.marketModels.map(m => {
-                        const isSelected = compareQueue.includes(m.id);
-                        return (
-                            <div 
-                                key={m.id}
-                                className={`
-                                    p-6 rounded-xl border-2 transition-all relative flex flex-col group
-                                    ${isSelected 
-                                        ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(59,130,246,0.2)]' 
-                                        : 'border-[var(--border-base)] bg-panel hover:border-[var(--text-muted)]'
-                                    }
-                                `}
-                            >
-                                <div className="flex justify-between items-start mb-4">
-                                    <h3 className="text-2xl font-black tracking-tight text-[var(--text-main)]">{m.name}</h3>
-                                    <div className="bg-[var(--bg-element)] px-3 py-1 rounded text-xs font-mono uppercase tracking-widest text-[var(--text-muted)]">{m.brand}</div>
-                                </div>
-                                <p className="text-[var(--text-muted)] mb-6 flex-grow">{m.description}</p>
-                                
-                                <button
-                                    onClick={() => toggleCompare(m.id)}
+        <div className="animate-enter stagger-6">
+            <SectionHeader number="06" title="Comparison Engine" />
+            
+            {data.marketModels.length === 0 ? (
+                <p className="text-[var(--text-muted)]">Awaiting comparison data for this category.</p>
+            ) : (
+                <div className="bg-panel/30 p-6 rounded-xl border border-[var(--border-base)]">
+                    <p className="mb-6 text-[var(--text-main)] flex items-center gap-2">
+                        <Scale size={20} className="text-primary" />
+                        Select exactly <strong>two</strong> models below to launch the VS Matrix.
+                    </p>
+                    
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {data.marketModels.map(m => {
+                            const isSelected = compareQueue.includes(m.id);
+                            return (
+                                <div 
+                                    key={m.id}
                                     className={`
-                                        w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all
+                                        p-6 rounded-xl border-2 transition-all relative flex flex-col group
                                         ${isSelected 
-                                            ? 'bg-primary text-white shadow-lg' 
-                                            : 'bg-[var(--bg-element)] text-[var(--text-muted)] hover:bg-[var(--border-base)] hover:text-[var(--text-main)]'
+                                            ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(59,130,246,0.2)]' 
+                                            : 'border-[var(--border-base)] bg-panel hover:border-[var(--text-muted)]'
                                         }
                                     `}
                                 >
-                                    {isSelected ? (
-                                        <><CheckCircle size={20} /> Selected for Compare</>
-                                    ) : (
-                                        <><Plus size={20} /> Add to Compare</>
-                                    )}
-                                </button>
-                            </div>
-                        )
-                    })}
+                                    <div className="flex justify-between items-start mb-4">
+                                        <h3 className="text-2xl font-black tracking-tight text-[var(--text-main)]">{m.name}</h3>
+                                        <div className="bg-[var(--bg-element)] px-3 py-1 rounded text-xs font-mono uppercase tracking-widest text-[var(--text-muted)]">{m.brand}</div>
+                                    </div>
+                                    <p className="text-[var(--text-muted)] mb-6 flex-grow">{m.description}</p>
+                                    
+                                    <button
+                                        onClick={() => toggleCompare(m.id)}
+                                        className={`
+                                            w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all
+                                            ${isSelected 
+                                                ? 'bg-primary text-white shadow-lg' 
+                                                : 'bg-[var(--bg-element)] text-[var(--text-muted)] hover:bg-[var(--border-base)] hover:text-[var(--text-main)]'
+                                            }
+                                        `}
+                                    >
+                                        {isSelected ? (
+                                            <><CheckCircle size={20} /> Selected for Compare</>
+                                        ) : (
+                                            <><Plus size={20} /> Add to Compare</>
+                                        )}
+                                    </button>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            )}
+        </div>
+
+        {/* RAW DATA INSPECTOR (Dev Mode) */}
+        {settings?.showComponentData && (
+            <div className="mt-20 border-t-2 border-dashed border-red-900/50 pt-10 animate-enter stagger-6">
+                <div className="flex items-center gap-2 text-red-500 font-bold mb-4">
+                    <FileJson size={20} /> RAW DATA INSPECTOR
+                </div>
+                <div className="bg-black/90 p-6 rounded-xl border border-red-900 overflow-x-auto shadow-inner">
+                    <pre className="text-xs font-mono text-red-400">
+                        {JSON.stringify(data, null, 2)}
+                    </pre>
                 </div>
             </div>
         )}

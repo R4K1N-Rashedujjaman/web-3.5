@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -75,6 +76,44 @@
       /* Density Classes */
       body.density-compact { --radius: 4px; font-size: 0.95em; }
       body.density-comfortable { font-size: 1.05em; }
+
+      /* --- MATERIAL DESIGN ENTRANCE ANIMATIONS --- */
+      
+      /* The Base Animation Keyframe */
+      @keyframes materialSlideUp {
+        0% { 
+          opacity: 0; 
+          transform: translateY(30px) scale(0.98); 
+        }
+        100% { 
+          opacity: 1; 
+          transform: translateY(0) scale(1); 
+        }
+      }
+
+      /* Base Class */
+      .animate-enter {
+        /* Standard Emphasis Decelerate Curve */
+        animation: materialSlideUp 0.6s cubic-bezier(0.2, 0.0, 0.2, 1) forwards;
+        opacity: 0; /* Start invisible so we don't see jump */
+      }
+
+      /* Stagger Delays for children */
+      .stagger-1 { animation-delay: 50ms; }
+      .stagger-2 { animation-delay: 100ms; }
+      .stagger-3 { animation-delay: 150ms; }
+      .stagger-4 { animation-delay: 200ms; }
+      .stagger-5 { animation-delay: 250ms; }
+      .stagger-6 { animation-delay: 300ms; }
+
+      /* Fast Fade for simple transitions */
+      @keyframes simpleFade {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fade {
+        animation: simpleFade 0.4s ease-out forwards;
+      }
     </style>
   <script type="importmap">
 {
@@ -82,12 +121,13 @@
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0?external=react"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>

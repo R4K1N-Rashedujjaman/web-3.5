@@ -7,19 +7,19 @@ import { AppSettings } from '../types';
 /* --- DASHBOARD VIEW --- */
 export const DashboardView: React.FC<{ onNavigate: (p: string) => void }> = ({ onNavigate }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-in">
-      <div className="mb-8 relative">
+    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+      <div className="mb-8 relative animate-enter stagger-1">
         <div className="absolute inset-0 bg-primary blur-[80px] opacity-20 rounded-full"></div>
         <h1 className="relative text-5xl md:text-7xl font-black tracking-tight mb-4 text-[var(--text-main)]">
           R4K1N <span className="text-primary">TECH SPECS</span>
         </h1>
       </div>
       
-      <p className="text-lg md:text-xl text-[var(--text-muted)] max-w-2xl mb-10 leading-relaxed">
+      <p className="animate-enter stagger-2 text-lg md:text-xl text-[var(--text-muted)] max-w-2xl mb-10 leading-relaxed">
         The ultimate static reference architecture for PC engineering, hardware comparisons, and technical specifications.
       </p>
       
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap gap-4 justify-center animate-enter stagger-3">
         <button 
           onClick={() => onNavigate('directory')}
           className="bg-primary hover:brightness-110 text-[var(--text-on-primary)] px-8 py-3 rounded-lg font-bold flex items-center gap-2 transition-all hover:scale-105 shadow-[0_4px_14px_0_rgba(0,0,0,0.39)] hover:shadow-[0_6px_20px_var(--primary-dim)]"
@@ -34,14 +34,15 @@ export const DashboardView: React.FC<{ onNavigate: (p: string) => void }> = ({ o
         </button>
       </div>
 
-      <div className="mt-20 w-full border-t border-[var(--border-base)] pt-10">
+      <div className="mt-20 w-full border-t border-[var(--border-base)] pt-10 animate-enter stagger-4">
         <h3 className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-[0.2em] mb-6">Featured Hardware Categories</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {['cpu', 'gpu', 'ram'].map(cat => (
+          {['cpu', 'gpu', 'ram'].map((cat, idx) => (
              <div 
                 key={cat} 
                 onClick={() => onNavigate(`component/${cat}`)}
-                className="group cursor-pointer bg-panel border border-[var(--border-base)] rounded-xl p-1 overflow-hidden hover:border-primary/50 transition-colors"
+                className={`group cursor-pointer bg-panel border border-[var(--border-base)] rounded-xl p-1 overflow-hidden hover:border-primary/50 transition-colors animate-enter`}
+                style={{ animationDelay: `${(idx + 5) * 100}ms` }}
              >
                 <div className="bg-black/40 h-32 rounded-lg mb-4 overflow-hidden relative">
                     <img 
@@ -77,8 +78,8 @@ export const DirectoryView: React.FC<{ onNavigate: (p: string) => void, settings
         : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
 
   return (
-    <div className="animate-fade-in">
-      <div className="flex items-center gap-4 mb-8 pb-4 border-b border-[var(--border-base)]">
+    <div>
+      <div className="flex items-center gap-4 mb-8 pb-4 border-b border-[var(--border-base)] animate-enter stagger-1">
         <div className="bg-primary/20 p-3 rounded-lg">
             <Database className="text-primary" size={32} />
         </div>
@@ -89,15 +90,18 @@ export const DirectoryView: React.FC<{ onNavigate: (p: string) => void, settings
       </div>
 
       <div className={`grid ${gridClasses} gap-6`}>
-        {CATEGORIES.map(id => {
+        {CATEGORIES.map((id, index) => {
             const data = COMPONENT_DB[id] || { name: id, image: undefined };
+            // Calculate delay based on index for the "waterfall" effect
+            const delayStyle = { animationDelay: `${(index % 10) * 50 + 100}ms` };
             
             if (isList) {
                 return (
                     <div 
                         key={id}
                         onClick={() => onNavigate(`component/${id}`)}
-                        className="flex items-center gap-4 bg-panel border border-[var(--border-base)] rounded-xl p-4 cursor-pointer hover:border-primary transition-all hover:bg-[var(--bg-element)]"
+                        className="flex items-center gap-4 bg-panel border border-[var(--border-base)] rounded-xl p-4 cursor-pointer hover:border-primary transition-all hover:bg-[var(--bg-element)] animate-enter"
+                        style={delayStyle}
                     >
                         <img 
                             src={data.image || `https://picsum.photos/seed/${id}/100/100`}
@@ -117,7 +121,8 @@ export const DirectoryView: React.FC<{ onNavigate: (p: string) => void, settings
                 <div 
                     key={id} 
                     onClick={() => onNavigate(`component/${id}`)}
-                    className={`bg-panel border border-[var(--border-base)] rounded-xl overflow-hidden hover:border-primary cursor-pointer group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10 ${isCompact ? 'text-sm' : ''}`}
+                    className={`bg-panel border border-[var(--border-base)] rounded-xl overflow-hidden hover:border-primary cursor-pointer group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10 ${isCompact ? 'text-sm' : ''} animate-enter`}
+                    style={delayStyle}
                 >
                     <div className={`${isCompact ? 'h-24' : 'h-40'} bg-black relative overflow-hidden`}>
                         <div className="absolute inset-0 bg-gradient-to-t from-panel to-transparent z-10" />
@@ -147,8 +152,8 @@ export const DirectoryView: React.FC<{ onNavigate: (p: string) => void, settings
 /* --- ABOUT VIEW --- */
 export const AboutView: React.FC = () => {
     return (
-        <div className="max-w-4xl mx-auto animate-fade-in pb-20">
-            <div className="bg-panel border border-[var(--border-base)] rounded-2xl overflow-hidden relative shadow-2xl">
+        <div className="max-w-4xl mx-auto pb-20">
+            <div className="bg-panel border border-[var(--border-base)] rounded-2xl overflow-hidden relative shadow-2xl animate-enter stagger-1">
                 {/* Header Decoration */}
                 <div className="h-32 bg-gradient-to-r from-blue-900 to-indigo-900 relative">
                     <div className="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
@@ -156,14 +161,14 @@ export const AboutView: React.FC = () => {
 
                 <div className="px-8 pb-12">
                     {/* Avatar / Profile Icon */}
-                    <div className="relative -mt-16 mb-6">
+                    <div className="relative -mt-16 mb-6 animate-enter stagger-2">
                         <div className="w-32 h-32 bg-deep border-4 border-panel rounded-full flex items-center justify-center shadow-2xl relative overflow-hidden group">
                              <User size={64} className="text-primary relative z-10" />
                              <div className="absolute inset-0 bg-primary/20 blur-md group-hover:bg-primary/40 transition-colors"></div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-[var(--border-base)] pb-8">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-[var(--border-base)] pb-8 animate-enter stagger-3">
                         <div>
                             <h1 className="text-4xl font-black mb-2 text-[var(--text-main)]">Rashedusjjaman Rakin</h1>
                             <div className="flex flex-wrap gap-2">
@@ -178,7 +183,7 @@ export const AboutView: React.FC = () => {
                         </div>
                     </div>
                     
-                    <div className="grid md:grid-cols-2 gap-8">
+                    <div className="grid md:grid-cols-2 gap-8 animate-enter stagger-4">
                         {/* Column 1: Academic Info */}
                         <div className="space-y-6">
                             <h3 className="text-lg font-bold flex items-center gap-2 text-[var(--text-main)] border-b border-[var(--border-base)] pb-2">
@@ -207,7 +212,7 @@ export const AboutView: React.FC = () => {
                         </div>
                     </div>
 
-                     <div className="mt-8 bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg text-sm text-blue-400 text-center">
+                     <div className="mt-8 bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg text-sm text-blue-400 text-center animate-enter stagger-5">
                         "Designed with precision to demonstrate advanced frontend architecture and component-based UI systems."
                     </div>
                 </div>
