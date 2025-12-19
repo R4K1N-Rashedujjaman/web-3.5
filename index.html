@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R4K1N Tech Specs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: 'var(--primary)',
+              'primary-dim': 'var(--primary-dim)',
+              surface: 'var(--bg-surface)',
+              panel: 'var(--bg-panel)',
+              deep: 'var(--bg-deep)',
+            },
+            fontFamily: {
+              sans: ['var(--font-stack)', 'sans-serif'],
+              mono: ['Fira Code', 'Courier New', 'monospace'],
+            },
+            borderRadius: {
+              'none': '0',
+              'sm': 'calc(var(--radius) * 0.5)',
+              DEFAULT: 'var(--radius)',
+              'md': 'var(--radius)',
+              'lg': 'calc(var(--radius) * 1.5)',
+              'xl': 'calc(var(--radius) * 2.5)',
+              'full': '9999px',
+            },
+            transitionDuration: {
+              DEFAULT: 'var(--anim-speed)',
+            }
+          },
+        },
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;900&family=Montserrat:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #3b82f6;
+        --primary-dim: rgba(59, 130, 246, 0.1);
+        --bg-deep: #020617;
+        --bg-surface: #0f172a;
+        --bg-panel: #1e293b;
+        
+        /* Semantic Colors for Theming */
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-base: rgba(255, 255, 255, 0.1);
+        --bg-element: rgba(0, 0, 0, 0.2);
+        
+        --font-stack: 'Inter';
+        --anim-speed: 300ms;
+        --radius: 8px; /* Default matches 0.5rem */
+      }
+      body {
+        background-color: var(--bg-deep);
+        color: var(--text-main);
+        transition: background-color var(--anim-speed), color var(--anim-speed);
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: var(--bg-deep); }
+      ::-webkit-scrollbar-thumb { background: var(--bg-panel); border-radius: 4px; border: 1px solid var(--border-base); }
+      ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+      
+      .blueprint-grid {
+        background-image: linear-gradient(var(--bg-panel) 1px, transparent 1px), linear-gradient(90deg, var(--bg-panel) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+      
+      /* Density Classes */
+      body.density-compact { --radius: 4px; font-size: 0.95em; }
+      body.density-comfortable { font-size: 1.05em; }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
