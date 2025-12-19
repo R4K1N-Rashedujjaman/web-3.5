@@ -22,7 +22,7 @@
 ### **WHY AND HOW THIS WAS MADE**
 
 **Why this was made:**
-This was made for a Dhaka Polytechnic Web Design project. The goal was to create a fast website for selling SSDs and PC Fans.
+This was made for a Dhaka Polytechnic Web Design project. The goal was to create a fast and functional website 
 
 **How this was made:**
 First, Odoo was used to design the website structure and automatically generate the base code. Then, the code was moved into Gemini Studio to fix the design and add modern features. Finally, everything was saved to GitHub and Netlify was used to make the website live.
